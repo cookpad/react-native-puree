@@ -9,8 +9,9 @@ export interface QueueItem {
 }
 
 export default class Queue {
-  buffer: QueueItem[]
   static STORAGE_KEY = 'react-native-puree:queue'
+
+  buffer: QueueItem[]
 
   async push (data: any): Promise<QueueItem> {
     if (!this.buffer) await this._init()

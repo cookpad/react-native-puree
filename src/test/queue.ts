@@ -13,7 +13,7 @@ test.serial('get', async t => {
   t.deepEqual(await queue.get(), [])
 
   for (let i = 0; i < 3; i++) {
-    await queue.push({ id: i+1, event: 'click' })
+    await queue.push({ id: i + 1, event: 'click' })
   }
 
   t.deepEqual(

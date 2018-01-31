@@ -21,8 +21,8 @@ test.serial('filters', async t => {
 
   puree.addOutput(async logs => {
     t.is(logs.length, 1)
-    t.is((<any>logs[0]).table_name, 'foobar')
-    t.is((<any>logs[0]).action, 'click')
+    t.is((logs[0] as any).table_name, 'foobar')
+    t.is((logs[0] as any).action, 'click')
   })
 
   puree.addFilter(addEventTime)

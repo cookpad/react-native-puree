@@ -15,9 +15,13 @@ export interface PureeConfig {
 }
 
 export default class Puree {
+  static DEFAULT_FLUSH_INTERVAL = 2 * 60 * 1000
+  static LOG_LIMIT = 10
+  static DEFAULT_MAX_RETRY = 5
+  static DEFAULT_FIRST_RETRY_INTERVAL = 1 * 1000
+
   queue: Queue
   buffer: QueueItem[]
-
   filters: PureeFilter[]
 
   // config
@@ -26,11 +30,6 @@ export default class Puree {
   firstRetryInterval: number
 
   _flushHandler: OutputHandler
-
-  static DEFAULT_FLUSH_INTERVAL = 2 * 60 * 1000
-  static LOG_LIMIT = 10
-  static DEFAULT_MAX_RETRY = 5
-  static DEFAULT_FIRST_RETRY_INTERVAL = 1 * 1000
 
   constructor (config: PureeConfig = {}) {
     this.queue = new Queue()
@@ -65,7 +64,7 @@ export default class Puree {
     this.buffer.push(queueItem)
   }
 
-  applyFilters (value): Log  {
+  applyFilters (value): Log {
     this.filters.forEach(f => {
       value = f(value)
     })
@@ -101,7 +100,7 @@ export default class Puree {
       await this._flushHandler(logs)
     } catch {
       await wait(Math.pow(2, retryCount) * this.firstRetryInterval)
-      return await this._process(logs, retryCount + 1)
+      return this._process(logs, retryCount + 1)
     }
   }
 }

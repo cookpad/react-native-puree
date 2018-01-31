@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
-    "test": "tsc && ava lib/test"
+    "test": "tsc && ava lib/test",
+    "lint": "tslint 'src/**/*.ts'"
   },
   "author": "",
   "license": "MIT",
@@ -29,6 +30,8 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-react-native": "^4.0.0",
     "mock-require": "^3.0.1",
+    "tslint": "^5.9.1",
+    "tslint-config-standard": "^7.0.0",
     "typescript": "^2.6.2"
   },
   "peerDependencies": {
