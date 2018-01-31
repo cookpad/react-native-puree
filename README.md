@@ -1,4 +1,6 @@
 # react-native-puree
+[![Build Status](https://travis-ci.org/cookpad/react-native-puree.svg?branch=master)](https://travis-ci.org/cookpad/react-native-puree)
+
 A log collector for React Native.
 
 Features:
