@@ -1,0 +1,37 @@
+{
+  "name": "react-native-puree",
+  "version": "0.0.1",
+  "description": "A log collector for React Native",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "test": "tsc && ava lib/test"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "buffer": "^5.0.8",
+    "react-native-uuid": "^1.4.9"
+  },
+  "ava": {
+    "require": [
+      "babel-register",
+      "babel-polyfill"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "react-native"
+    ]
+  },
+  "devDependencies": {
+    "ava": "^0.24.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-react-native": "^4.0.0",
+    "mock-require": "^3.0.1",
+    "typescript": "^2.6.2"
+  },
+  "peerDependencies": {
+    "react-native": "^0.52.2"
+  }
+}
