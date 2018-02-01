@@ -7,7 +7,7 @@
   "scripts": {
     "test": "tsc && ava lib/test",
     "lint": "tslint 'src/**/*.ts'",
-    "prepublish": "tsc"
+    "prepare": "tsc"
   },
   "author": "",
   "license": "MIT",
