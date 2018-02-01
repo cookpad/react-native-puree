@@ -4,6 +4,14 @@ export type Log = object
 export type OutputHandler = (logs: Log[]) => Promise<void>
 export type PureeFilter = (log: Log) => Log
 
+declare var global: any
+
+function debugLog (message: string) {
+  if (global.__DEV__) {
+    console.log(`[puree] ${message}`)
+  }
+}
+
 async function wait (interval: number) {
   await new Promise((resolve) => { setTimeout(resolve, interval) })
 }
@@ -62,6 +70,8 @@ export default class Puree {
 
     const queueItem = await this.queue.push(log)
     this.buffer.push(queueItem)
+
+    debugLog(`Recorded a log: ${JSON.stringify(log)}`)
   }
 
   applyFilters (value): Log {
@@ -80,6 +90,8 @@ export default class Puree {
     const items = this.buffer.splice(0, Puree.LOG_LIMIT)
 
     if (items.length === 0) return
+    debugLog(`Flushing ${items.length} logs`)
+
     const logs = items.map(item => item.data)
 
     const handledError = await this._process(logs)
@@ -87,6 +99,8 @@ export default class Puree {
       console.error(handledError)
       return
     }
+
+    debugLog(`Finished processing logs: ${JSON.stringify(logs)}`)
 
     return this.queue.remove(items)
   }
