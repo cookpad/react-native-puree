@@ -16,8 +16,8 @@ test.beforeEach(async () => {
   await AsyncStorage.clear()
 })
 
-test.serial('filters', async t => {
-  const puree = new Puree({ flushInterval: 10 })
+test.serial('send log with filters', async t => {
+  const puree = new Puree()
 
   puree.addOutput(async logs => {
     t.is(logs.length, 1)
@@ -30,12 +30,32 @@ test.serial('filters', async t => {
     return Object.assign(log, { table_name: 'foobar' })
   })
 
-  await puree.start()
   await puree.send({ action: 'click' })
-  await wait(10)
+  await puree.flush()
 })
 
-test.serial('flush in the interval', async t => {
+test.serial('flush logs', async t => {
+  const puree = new Puree()
+
+  let called = 0
+  puree.addOutput(async logs => {
+    called += 1
+    t.is(logs.length, 1)
+    t.deepEqual(logs, [
+      { action: 'click' }
+    ])
+  })
+
+  await puree.flush() // logs should be empty
+
+  await puree.send({ action: 'click' })
+  await puree.flush()
+
+  await puree.flush() // logs should be empty
+  t.is(called, 1)
+})
+
+test.serial('flush after the interval', async t => {
   const puree = new Puree({ flushInterval: 1 * 10 })
 
   puree.addFilter(addEventTime)

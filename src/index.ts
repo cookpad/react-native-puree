@@ -56,18 +56,17 @@ export default class Puree {
   }
 
   async start () {
-    if (!this.buffer) await this._init()
-
-    this._flush()
+    await this.flush()
 
     setInterval(() => {
-      this._flush()
+      this.flush()
     }, this.flushInterval)
   }
 
   async send (log: Log) {
     log = this.applyFilters(log)
 
+    if (this.buffer === undefined) await this._initBuffer()
     const queueItem = await this.queue.push(log)
     this.buffer.push(queueItem)
 
@@ -82,11 +81,8 @@ export default class Puree {
     return value
   }
 
-  async _init () {
-    this.buffer = await this.queue.get()
-  }
-
-  async _flush () {
+  async flush () {
+    if (this.buffer === undefined) await this._initBuffer()
     const items = this.buffer.splice(0, Puree.LOG_LIMIT)
 
     if (items.length === 0) return
@@ -116,5 +112,9 @@ export default class Puree {
       await wait(Math.pow(2, retryCount) * this.firstRetryInterval)
       return this._process(logs, retryCount + 1)
     }
+  }
+
+  async _initBuffer () {
+    this.buffer = await this.queue.get()
   }
 }
