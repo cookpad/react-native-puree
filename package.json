@@ -1,6 +1,6 @@
 {
   "name": "react-native-puree",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A log collector for React Native",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
