@@ -83,3 +83,9 @@ class AppRoot extends React.Component {
 }
 ```
 
+## Link
+- [puree-android](https://github.com/cookpad/puree-android)
+- [puree-ios](https://github.com/cookpad/puree-ios)
+
+## License
+MIT
