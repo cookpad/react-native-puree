@@ -35,6 +35,38 @@ puree.start()
 puree.send({ event: 'click', recipe_id: 1234 })
 ```
 
+
+## Usage
+### Configure
+```js
+const puree = new Puree({
+  flushInterval: 2 * 60 * 1000, // the interval to flush logs in milli second
+  maxRetry: 5                   // try to send logs until max retry count
+  firstRetryInterval: 1 * 1000  // the interval between the fail to send logs and the first retry
+})
+```
+
+### Record logs
+```js
+puree.send({ event: 'click', recipe_id: 1234 })
+```
+
+A log is stored into persistent storage ( [AsyncStorage](https://facebook.github.io/react-native/docs/asyncstorage.html) ) after applying filters to it. 
+
+### Flush logs
+You can automatically send logs every interval with `puree.start()`.
+
+```js
+puree.start()
+```
+
+or manually:
+
+```js
+puree.flush()
+```
+
+
 ## Recipe
 
 ### Flush logs on resume
