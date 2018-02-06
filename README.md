@@ -34,3 +34,52 @@ puree.start()
 // send log
 puree.send({ event: 'click', recipe_id: 1234 })
 ```
+
+## Recipe
+
+### Flush logs on resume
+
+Use `AppState` and `puree.flush()`.
+
+See also: https://facebook.github.io/react-native/docs/appstate.html
+
+```js
+import { AppState } from 'react-native'
+
+class AppRoot extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      appState: AppState.currentState
+    };
+  }
+
+  componentDidMount() {
+    AppState.addEventListener('change', this._handleAppStateChange);
+  }
+
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this._handleAppStateChange);
+  }
+
+  onForeground () {
+    puree.flush();
+  }
+
+  // https://facebook.github.io/react-native/docs/appstate.html
+  _handleAppStateChange = (nextAppState: string) => {
+    if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+      this.onForeground();
+    }
+
+    this.setState({ appState: nextAppState });
+  }
+
+  render() {
+    return (
+      <App/>
+    );
+  }
+}
+```
+
