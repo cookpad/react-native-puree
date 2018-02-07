@@ -1,7 +1,6 @@
 import test from 'ava'
 import './_mock-async-storage'
 import Queue from '../queue'
-// @ts-ignore: Cannot find module
 import { AsyncStorage } from 'react-native'
 
 test.beforeEach(async () => {

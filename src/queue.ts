@@ -1,5 +1,4 @@
 // persistent queue using AsyncStorage
-// @ts-ignore: Cannot find module
 import { AsyncStorage } from 'react-native'
 import * as uuid from 'react-native-uuid'
 
