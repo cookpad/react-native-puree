@@ -1,7 +1,6 @@
 import test from 'ava'
 import './_mock-async-storage'
 import Puree from '../'
-// @ts-ignore: Cannot find module
 import { AsyncStorage } from 'react-native'
 
 function addEventTime (log) {

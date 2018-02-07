@@ -27,6 +27,7 @@
     ]
   },
   "devDependencies": {
+    "@types/react-native": "^0.52.8",
     "ava": "^0.24.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-react-native": "^4.0.0",
