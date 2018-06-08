@@ -37,7 +37,7 @@ export default class Puree {
   maxRetry: number
   firstRetryInterval: number
 
-  _flushHandler: OutputHandler
+  private flushHandler: OutputHandler
 
   constructor (config: PureeConfig = {}) {
     this.queue = new Queue()
@@ -52,7 +52,7 @@ export default class Puree {
   }
 
   addOutput (handler: OutputHandler) {
-    this._flushHandler = handler
+    this.flushHandler = handler
   }
 
   async start () {
@@ -66,7 +66,7 @@ export default class Puree {
   async send (log: Log) {
     log = this.applyFilters(log)
 
-    if (this.buffer === undefined) await this._initBuffer()
+    if (this.buffer === undefined) await this.initBuffer()
     const queueItem = await this.queue.push(log)
     this.buffer.push(queueItem)
 
@@ -82,7 +82,7 @@ export default class Puree {
   }
 
   async flush () {
-    if (this.buffer === undefined) await this._initBuffer()
+    if (this.buffer === undefined) await this.initBuffer()
     const items = this.buffer.splice(0, Puree.LOG_LIMIT)
 
     if (items.length === 0) return
@@ -90,7 +90,7 @@ export default class Puree {
 
     const logs = items.map(item => item.data)
 
-    const handledError = await this._process(logs)
+    const handledError = await this.process(logs)
     if (handledError) {
       console.error(handledError)
       return
@@ -101,20 +101,20 @@ export default class Puree {
     return this.queue.remove(items)
   }
 
-  async _process (logs: Log[], retryCount = 0): Promise<Error> {
+  private async process (logs: Log[], retryCount = 0): Promise<Error> {
     if (retryCount > this.maxRetry) {
       return new Error('retryCount exceeded max retry')
     }
 
     try {
-      await this._flushHandler(logs)
+      await this.flushHandler(logs)
     } catch {
       await wait(Math.pow(2, retryCount) * this.firstRetryInterval)
-      return this._process(logs, retryCount + 1)
+      return this.process(logs, retryCount + 1)
     }
   }
 
-  async _initBuffer () {
+  private async initBuffer () {
     this.buffer = await this.queue.get()
   }
 }
