@@ -102,13 +102,13 @@ export default class Puree {
   }
 
   private async process (logs: Log[], retryCount = 0): Promise<Error> {
-    if (retryCount > this.maxRetry) {
-      return new Error('retryCount exceeded max retry')
-    }
-
     try {
       await this.flushHandler(logs)
-    } catch {
+    } catch (e) {
+      if (retryCount >= this.maxRetry) {
+        return new Error('retryCount exceeded max retry')
+      }
+      console.warn(`Error occurred! Retrying... (retry count: ${retryCount})`, e);
       await wait(Math.pow(2, retryCount) * this.firstRetryInterval)
       return this.process(logs, retryCount + 1)
     }
